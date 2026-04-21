@@ -1,0 +1,20 @@
+$kind: collection
+name: 'AI Medical SaaS — Inference API'
+description: |-
+  Brain Tumor & Ischemic Stroke detection API built with FastAPI + Supabase.
+
+  Supabase handles authentication, storage, and the database.
+  This service handles TensorFlow inference only.
+
+  **Base URL:** `{{baseUrl}}`
+  **Auth:** Bearer token via `Authorization: Bearer {{bearerToken}}`
+  **Rate limit:** 10 predictions / minute / user
+variables:
+  - key: baseUrl
+    value: 'http://localhost:8000'
+    description: 'Root URL of the FastAPI server'
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{bearerToken}}'

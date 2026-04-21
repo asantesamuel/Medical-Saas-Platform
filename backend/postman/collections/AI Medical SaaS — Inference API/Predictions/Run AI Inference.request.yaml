@@ -1,0 +1,67 @@
+$kind: http-request
+name: 'Run AI Inference'
+method: POST
+url: '{{baseUrl}}/api/v1/predictions/predict'
+order: 1000
+description: |-
+  **POST /api/v1/predictions/predict**
+
+  Accepts a Supabase Storage image path and model type. Downloads the image,
+  runs the TensorFlow model, generates a Grad-CAM heatmap, persists the result
+  to Supabase DB, and returns structured prediction JSON.
+
+  **Rate limit:** 10 requests / minute / user.
+
+  The `user_id` in the request body must match the authenticated user's JWT
+  subject — a mismatch returns `403 Forbidden`.
+
+  **Model types:**
+  - `tumor` — Brain tumour classification
+  - `stroke` — Ischemic stroke detection
+headers:
+  - key: Content-Type
+    value: application/json
+  - key: Authorization
+    value: 'Bearer {{bearerToken}}'
+body:
+  type: json
+  content: |-
+    {
+      "image_path": "scans/{{userId}}/brain_mri_001.jpg",
+      "model_type": "tumor",
+      "user_id": "{{userId}}"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has prediction_id", function () {
+          const json = pm.response.json();
+          pm.expect(json).to.have.property("prediction_id");
+          pm.expect(json.prediction_id).to.be.a("string");
+      });
+
+      pm.test("Response has confidence_score between 0 and 1", function () {
+          const json = pm.response.json();
+          pm.expect(json.confidence_score).to.be.within(0, 1);
+      });
+
+      pm.test("Response has top_3_results array", function () {
+          const json = pm.response.json();
+          pm.expect(json.top_3_results).to.be.an("array").with.lengthOf(3);
+      });
+
+      pm.test("low_confidence_warning is boolean", function () {
+          const json = pm.response.json();
+          pm.expect(json.low_confidence_warning).to.be.a("boolean");
+      });
+
+      // Store prediction_id for downstream requests
+      if (pm.response.code === 200) {
+          const json = pm.response.json();
+          pm.environment.set("predictionId", json.prediction_id);
+      }

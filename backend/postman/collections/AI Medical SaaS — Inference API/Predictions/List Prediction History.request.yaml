@@ -1,0 +1,55 @@
+$kind: http-request
+name: 'List Prediction History'
+method: GET
+url: '{{baseUrl}}/api/v1/predictions/'
+order: 2000
+description: |-
+  **GET /api/v1/predictions/**
+
+  Returns the authenticated user's prediction history, ordered by
+  `created_at` descending. Supabase Row-Level Security (RLS) guarantees
+  only the caller's own rows are returned — no user_id filter needed.
+
+  **Query parameters:**
+  - `limit` (default: 50) — max records to return
+  - `offset` (default: 0) — pagination offset
+headers:
+  - key: Authorization
+    value: 'Bearer {{bearerToken}}'
+queryParams:
+  - key: limit
+    value: '20'
+    description: 'Maximum number of records to return (default: 50)'
+  - key: offset
+    value: '0'
+    description: 'Pagination offset (default: 0)'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response is an array", function () {
+          const json = pm.response.json();
+          pm.expect(json).to.be.an("array");
+      });
+
+      pm.test("Each record has required fields", function () {
+          const json = pm.response.json();
+          json.forEach(function (record) {
+              pm.expect(record).to.have.property("id");
+              pm.expect(record).to.have.property("model_type");
+              pm.expect(record).to.have.property("result");
+              pm.expect(record).to.have.property("confidence_score");
+              pm.expect(record).to.have.property("created_at");
+          });
+      });
+
+      pm.test("model_type is tumor or stroke", function () {
+          const json = pm.response.json();
+          json.forEach(function (record) {
+              pm.expect(["tumor", "stroke"]).to.include(record.model_type);
+          });
+      });

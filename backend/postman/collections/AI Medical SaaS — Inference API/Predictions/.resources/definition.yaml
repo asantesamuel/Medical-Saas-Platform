@@ -1,0 +1,10 @@
+$kind: collection
+name: Predictions
+description: |-
+  AI inference endpoints for brain tumor and ischemic stroke detection.
+
+  All routes are prefixed with `/api/v1/predictions` and require a valid
+  Supabase JWT Bearer token.
+
+  **Rate limit:** 10 POST /predict requests per minute per IP.
+order: 2000

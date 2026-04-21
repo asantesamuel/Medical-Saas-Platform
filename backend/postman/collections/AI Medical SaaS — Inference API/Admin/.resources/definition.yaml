@@ -1,0 +1,11 @@
+$kind: collection
+name: Admin
+description: |-
+  Admin-only endpoints that power the admin dashboard.
+  All routes are prefixed with `/api/v1/admin` and require a valid Supabase
+  JWT Bearer token belonging to a user with `role = 'admin'` in the
+  `profiles` table.
+
+  **HIPAA note:** Aggregate stats do not expose individual scan data.
+  Audit log records access events without PHI payload.
+order: 3000

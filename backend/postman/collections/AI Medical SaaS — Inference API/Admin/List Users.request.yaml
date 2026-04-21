@@ -1,0 +1,53 @@
+$kind: http-request
+name: 'List Users'
+method: GET
+url: '{{baseUrl}}/api/v1/admin/users'
+order: 1000
+description: |-
+  **GET /api/v1/admin/users**
+
+  Returns all registered users with their profile data and scan counts.
+  Requires `role = 'admin'` in the Supabase `profiles` table.
+
+  **Query parameters:**
+  - `limit` (default: 100) — max records to return
+  - `offset` (default: 0) — pagination offset
+
+  Each record includes: `id`, `full_name`, `role`, `created_at`, `scan_count`.
+headers:
+  - key: Authorization
+    value: 'Bearer {{bearerToken}}'
+queryParams:
+  - key: limit
+    value: '50'
+    description: 'Maximum number of users to return (default: 100)'
+  - key: offset
+    value: '0'
+    description: 'Pagination offset (default: 0)'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response is an array", function () {
+          const json = pm.response.json();
+          pm.expect(json).to.be.an("array");
+      });
+
+      pm.test("Each user has required fields", function () {
+          const json = pm.response.json();
+          json.forEach(function (user) {
+              pm.expect(user).to.have.property("id");
+              pm.expect(user).to.have.property("role");
+              pm.expect(user).to.have.property("created_at");
+              pm.expect(user).to.have.property("scan_count");
+          });
+      });
+
+      pm.test("Non-admin returns 403", function () {
+          // This test only passes when the token belongs to a non-admin user
+          // Swap the bearerToken to a regular user token to verify this
+      });

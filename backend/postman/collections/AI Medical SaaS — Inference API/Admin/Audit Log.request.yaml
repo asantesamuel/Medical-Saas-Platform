@@ -1,0 +1,66 @@
+$kind: http-request
+name: 'Audit Log'
+method: GET
+url: '{{baseUrl}}/api/v1/admin/audit'
+order: 3000
+description: |-
+  **GET /api/v1/admin/audit**
+
+  Returns the most recent audit events from the `audit_log` table, ordered
+  by `created_at` descending. Requires `role = 'admin'`.
+
+  **HIPAA:** Audit events record access events (predict, login, admin_access)
+  using only the user UUID — no email addresses or PHI payload are stored.
+
+  **Query parameters:**
+  - `limit` (default: 200) — max events to return
+
+  Event fields:
+  - `id` — UUID of the audit event
+  - `event_type` — `predict` | `login` | `admin_access`
+  - `user_id` — UUID of the acting user (no email)
+  - `metadata` — model_type, confidence range — no PHI
+  - `created_at` — ISO 8601 timestamp
+headers:
+  - key: Authorization
+    value: 'Bearer {{bearerToken}}'
+queryParams:
+  - key: limit
+    value: '50'
+    description: 'Maximum number of audit events to return (default: 200)'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response is an array", function () {
+          const json = pm.response.json();
+          pm.expect(json).to.be.an("array");
+      });
+
+      pm.test("Each event has required HIPAA-safe fields", function () {
+          const json = pm.response.json();
+          json.forEach(function (event) {
+              pm.expect(event).to.have.property("id");
+              pm.expect(event).to.have.property("event_type");
+              pm.expect(event).to.have.property("user_id");
+              pm.expect(event).to.have.property("metadata");
+              pm.expect(event).to.have.property("created_at");
+          });
+      });
+
+      pm.test("event_type is a known value", function () {
+          const json = pm.response.json();
+          const validTypes = ["predict", "login", "admin_access"];
+          json.forEach(function (event) {
+              pm.expect(validTypes).to.include(event.event_type);
+          });
+      });
+
+      pm.test("No email addresses in response (HIPAA)", function () {
+          const body = pm.response.text();
+          pm.expect(body).to.not.match(/@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+      });

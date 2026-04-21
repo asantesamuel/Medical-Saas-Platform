@@ -1,0 +1,53 @@
+$kind: http-request
+name: 'Platform Stats'
+method: GET
+url: '{{baseUrl}}/api/v1/admin/stats'
+order: 2000
+description: |-
+  **GET /api/v1/admin/stats**
+
+  Returns platform-wide aggregate statistics for the admin dashboard.
+  Requires `role = 'admin'` in the Supabase `profiles` table.
+
+  **HIPAA:** Aggregate stats do not expose individual scan data or PHI.
+
+  Response fields:
+  - `total_users` — total registered users
+  - `total_predictions` — all-time inference count
+  - `tumor_predictions` — brain tumour model runs
+  - `stroke_predictions` — ischemic stroke model runs
+  - `avg_confidence` — mean confidence score across all predictions
+  - `predictions_today` — inference count for the current UTC day
+headers:
+  - key: Authorization
+    value: 'Bearer {{bearerToken}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has all stat fields", function () {
+          const json = pm.response.json();
+          pm.expect(json).to.have.property("total_users");
+          pm.expect(json).to.have.property("total_predictions");
+          pm.expect(json).to.have.property("tumor_predictions");
+          pm.expect(json).to.have.property("stroke_predictions");
+          pm.expect(json).to.have.property("avg_confidence");
+          pm.expect(json).to.have.property("predictions_today");
+      });
+
+      pm.test("avg_confidence is between 0 and 1", function () {
+          const json = pm.response.json();
+          pm.expect(json.avg_confidence).to.be.within(0, 1);
+      });
+
+      pm.test("Counts are non-negative integers", function () {
+          const json = pm.response.json();
+          pm.expect(json.total_users).to.be.at.least(0);
+          pm.expect(json.total_predictions).to.be.at.least(0);
+          pm.expect(json.tumor_predictions + json.stroke_predictions)
+              .to.be.at.most(json.total_predictions);
+      });

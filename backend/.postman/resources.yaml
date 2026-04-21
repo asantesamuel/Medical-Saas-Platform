@@ -1,0 +1,17 @@
+# Use this workspace to collaborate
+workspace:
+  id: 237cd080-704b-4f53-bec3-9efa31f04c9d
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  environments:
+    ..\postman\environments\AI Medical SaaS — Local.environment.yaml: 9d273982-64ff-597a-a99a-3065afc9b989
+  collections:
+    ..\postman\collections\AI Medical SaaS — Inference API: 28572862-953eee08-711d-4975-8012-2d923c5f549d
+
+# All resources in the `postman/` folder are automatically registered in Local View.
+# Point to additional files outside the `postman/` folder to register them individually. Example:
+#localResources:
+#  collections:
+#    - ../tests/E2E Test Collection/

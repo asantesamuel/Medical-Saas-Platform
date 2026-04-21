@@ -1,0 +1,25 @@
+$kind: http-request
+name: 'Liveness Probe'
+method: GET
+url: '{{baseUrl}}/health/'
+order: 1000
+description: |-
+  **GET /health/**
+
+  Lightweight liveness probe used by Render / Railway to confirm the container
+  process is alive. Returns `{"status": "ok"}` immediately — no DB or model
+  checks are performed.
+
+  No authentication required.
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Body has status ok", function () {
+          const json = pm.response.json();
+          pm.expect(json.status).to.eql("ok");
+      });

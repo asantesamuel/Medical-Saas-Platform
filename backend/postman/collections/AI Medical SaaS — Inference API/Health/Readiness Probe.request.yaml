@@ -1,0 +1,40 @@
+$kind: http-request
+name: 'Readiness Probe'
+method: GET
+url: '{{baseUrl}}/health/ready'
+order: 2000
+description: |-
+  **GET /health/ready**
+
+  Deep readiness probe that verifies both the TensorFlow model registry and
+  Supabase connectivity before reporting the service as ready.
+
+  Returns `status: "ok"` when all models are loaded and Supabase is reachable,
+  or `status: "degraded"` otherwise.
+
+  No authentication required.
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has required fields", function () {
+          const json = pm.response.json();
+          pm.expect(json).to.have.property("status");
+          pm.expect(json).to.have.property("models_loaded");
+          pm.expect(json).to.have.property("supabase_reachable");
+      });
+
+      pm.test("Status is ok or degraded", function () {
+          const json = pm.response.json();
+          pm.expect(["ok", "degraded"]).to.include(json.status);
+      });
+
+      pm.test("models_loaded contains tumor and stroke", function () {
+          const json = pm.response.json();
+          pm.expect(json.models_loaded).to.have.property("tumor");
+          pm.expect(json.models_loaded).to.have.property("stroke");
+      });

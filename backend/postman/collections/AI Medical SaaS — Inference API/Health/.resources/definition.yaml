@@ -1,0 +1,7 @@
+$kind: collection
+name: Health
+description: |-
+  Liveness and readiness probes for the inference service.
+  These endpoints are used by Render / Railway for container health checks.
+  No authentication required.
+order: 1000
