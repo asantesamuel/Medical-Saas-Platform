@@ -1,0 +1,34 @@
+# ── Core API ──────────────────────────────────────────────────────────────────
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+python-multipart>=0.0.12        # file upload support
+
+# ── Supabase ──────────────────────────────────────────────────────────────────
+supabase>=2.9.0                 # supabase-py (service role key — server only)
+
+# ── AI / ML ───────────────────────────────────────────────────────────────────
+tensorflow-cpu>=2.18.0          # CPU-only — matches Render/Railway free tier
+Pillow>=11.0.0                  # image preprocessing
+numpy>=1.26.0                   # array ops (pinned below 2.x for TF compat)
+
+# ── Config & Validation ───────────────────────────────────────────────────────
+pydantic>=2.9.0
+pydantic-settings>=2.6.0        # BaseSettings via .env
+python-dotenv>=1.0.1
+
+# ── Rate Limiting ─────────────────────────────────────────────────────────────
+slowapi>=0.1.9                  # 10 predict calls/min/user
+limits>=3.13.0
+
+# ── HTTP Client ───────────────────────────────────────────────────────────────
+httpx>=0.27.0                   # async HTTP (used in tests + JWT verify)
+
+# ── Security / HIPAA ──────────────────────────────────────────────────────────
+python-jose[cryptography]>=3.3.0 # JWT decode for token inspection (not issuance)
+
+# ── Dev / Test ────────────────────────────────────────────────────────────────
+pytest>=8.3.0
+pytest-asyncio>=0.24.0
+pytest-cov>=6.0.0
+httpx>=0.27.0                   # TestClient
+ruff>=0.7.0                     # linter + formatter
