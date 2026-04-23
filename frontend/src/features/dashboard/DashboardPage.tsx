@@ -2,14 +2,13 @@ import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { v4 as uuidv4 } from "uuid";
+
 
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
 import { useRunInference } from "@/hooks/usePredictions";
 import type { ModelType } from "@/types";
-import LowConfidenceBanner from "@/features/predictions/LowConfidenceBanner";
-import ConfidenceBar from "@/features/predictions/ConfidenceBar";
+const uuidv4 = () => crypto.randomUUID();
 
 const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
 const ACCEPT = { "image/jpeg": [".jpg", ".jpeg"], "image/png": [".png"] };

@@ -14,7 +14,9 @@ export default function LoginPage() {
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error;
+      if (error)
+          console.log(error.message);
+
       navigate("/dashboard");
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Login failed");
