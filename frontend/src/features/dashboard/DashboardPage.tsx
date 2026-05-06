@@ -52,14 +52,10 @@ export default function DashboardPage() {
       if (uploadErr) throw new Error(uploadErr.message);
 
       // 2. Trigger FastAPI inference
-      const result = await runInference.mutateAsync({
-        image_path: `scan-images/${objectPath}`,
-        model_type: modelType,
-        user_id: user.id,
-      });
-
-      toast.success("Scan analysed successfully");
-      navigate(`/history/${result.prediction_id}`);
+        const id = result.prediction_id ?? result.id;
+        if (!id) throw new Error("No prediction ID returned from server");
+        toast.success("Scan analysed successfully");
+        navigate(`/history/${id}`);
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Inference failed");
     } finally {

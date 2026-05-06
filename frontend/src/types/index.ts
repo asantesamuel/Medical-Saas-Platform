@@ -32,20 +32,22 @@ export interface PredictResponse extends Prediction {
 }
 
 export interface Profile {
-  id: string;
-  full_name: string | null;
-  role: "user" | "admin";
-  avatar_url: string | null;
-  created_at: string;
+    id: string;
+    full_name: string | null;
+    email: string | null;        // ← add this line
+    role: "user" | "admin";
+    avatar_url: string | null;
+    created_at: string;
 }
 
 // Admin-only types
 export interface UserSummary {
-  id: string;
-  full_name: string | null;
-  role: string;
-  created_at: string;
-  scan_count: number;
+    id: string;
+    full_name: string | null;
+    email: string | null;        // ← add this line
+    role: string;
+    created_at: string;
+    scan_count: number;
 }
 
 export interface PlatformStats {
