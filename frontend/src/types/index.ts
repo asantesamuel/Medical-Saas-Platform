@@ -3,12 +3,12 @@
 
 export type ModelType = "tumor" | "stroke";
 
-export interface TopResult {
+export interface TopResult extends Record<string, unknown> {
   label: string;
   confidence: number;
 }
 
-export interface Prediction {
+export interface Prediction extends Record<string, unknown> {
   id: string;
   model_type: ModelType;
   result: string;
@@ -31,7 +31,7 @@ export interface PredictResponse extends Prediction {
   prediction_id: string;
 }
 
-export interface Profile {
+export interface Profile extends Record<string, unknown> {
     id: string;
     full_name: string | null;
     email: string | null;        // ← add this line
@@ -59,7 +59,7 @@ export interface PlatformStats {
   predictions_today: number;
 }
 
-export interface AuditEvent {
+export interface AuditEvent extends Record<string, unknown> {
   id: string;
   event_type: string;
   user_id: string;
@@ -75,17 +75,24 @@ export interface Database {
         Row: Profile;
         Insert: Omit<Profile, "created_at">;
         Update: Partial<Omit<Profile, "id" | "created_at">>;
+        Relationships: [];
       };
       predictions: {
         Row: Prediction;
         Insert: Omit<Prediction, "id" | "created_at">;
         Update: never;
+        Relationships: [];
       };
       audit_log: {
         Row: AuditEvent;
         Insert: Omit<AuditEvent, "id" | "created_at">;
         Update: never;
+        Relationships: [];
       };
     };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
+    Enums: Record<string, never>;
+    CompositeTypes: Record<string, never>;
   };
 }
