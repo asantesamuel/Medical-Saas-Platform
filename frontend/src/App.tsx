@@ -25,8 +25,10 @@ function AdminRoute({ children }: { children: React.ReactNode }) {
 
 function FullPageSpinner() {
   return (
-    <div className="flex h-screen items-center justify-center">
-      <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-200 border-t-brand-600" />
+    <div className="flex h-screen items-center justify-center bg-slate-50">
+      <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-glow">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-100 border-t-brand-700" />
+      </div>
     </div>
   );
 }

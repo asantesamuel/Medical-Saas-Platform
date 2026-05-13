@@ -1,5 +1,5 @@
 interface Props {
-  value: number;   // 0.0 – 1.0
+  value: number;
   label?: string;
   size?: "sm" | "md";
 }
@@ -7,25 +7,22 @@ interface Props {
 export default function ConfidenceBar({ value, label, size = "md" }: Props) {
   const pct = Math.round(value * 100);
   const color =
-    value >= 0.75 ? "bg-success-500" :
-    value >= 0.40 ? "bg-warning-500" :
-                    "bg-danger-500";
+    value >= 0.75
+      ? "from-success-400 to-success-500"
+      : value >= 0.4
+        ? "from-warning-500 to-amber-400"
+        : "from-danger-500 to-rose-400";
 
   return (
     <div className="w-full">
       {label && (
-        <div className="mb-1 flex justify-between">
-          <span className={`text-${size === "sm" ? "xs" : "sm"} text-slate-600`}>{label}</span>
-          <span className={`text-${size === "sm" ? "xs" : "sm"} font-medium text-slate-900`}>
-            {pct}%
-          </span>
+        <div className="mb-2 flex justify-between gap-4">
+          <span className={`${size === "sm" ? "text-xs" : "text-sm"} font-medium text-slate-600`}>{label}</span>
+          <span className={`${size === "sm" ? "text-xs" : "text-sm"} font-semibold text-slate-950`}>{pct}%</span>
         </div>
       )}
-      <div className={`w-full rounded-full bg-slate-100 ${size === "sm" ? "h-1.5" : "h-2.5"}`}>
-        <div
-          className={`${color} rounded-full transition-all duration-500 ${size === "sm" ? "h-1.5" : "h-2.5"}`}
-          style={{ width: `${pct}%` }}
-        />
+      <div className={`w-full overflow-hidden rounded-full bg-slate-100 ring-1 ring-slate-200/80 ${size === "sm" ? "h-1.5" : "h-2.5"}`}>
+        <div className={`h-full rounded-full bg-gradient-to-r ${color} transition-all duration-700 ease-out`} style={{ width: `${pct}%` }} />
       </div>
     </div>
   );
