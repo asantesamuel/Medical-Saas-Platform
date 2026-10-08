@@ -20,8 +20,14 @@ export default function AppLayout() {
 
   return (
     <div className="min-h-screen overflow-hidden bg-slate-50 text-slate-950">
-      <div className="pointer-events-none fixed inset-0 soft-grid opacity-60" aria-hidden="true" />
-      <div className="pointer-events-none fixed inset-x-0 top-0 h-56 bg-gradient-to-b from-brand-100/70 via-white/40 to-transparent" aria-hidden="true" />
+      <div
+        className="pointer-events-none fixed inset-0 soft-grid opacity-60"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none fixed inset-x-0 top-0 h-56 bg-gradient-to-b from-brand-100/70 via-white/40 to-transparent"
+        aria-hidden="true"
+      />
 
       <div className="relative flex min-h-screen flex-col lg:flex-row">
         <aside className="z-20 border-b border-white/70 bg-white/[0.82] px-4 py-3 shadow-[0_20px_60px_-42px_rgba(15,23,42,0.4)] backdrop-blur-xl lg:sticky lg:top-0 lg:flex lg:h-screen lg:w-72 lg:flex-col lg:border-b-0 lg:border-r lg:px-4 lg:py-5">
@@ -31,8 +37,12 @@ export default function AppLayout() {
                 <PulseIcon className="h-5 w-5" />
               </div>
               <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-slate-950">NeuroScan AI</p>
-                <p className="truncate text-xs font-medium text-slate-500">Clinical decision support</p>
+                <p className="truncate text-sm font-semibold text-slate-950">
+                  NeuroScan AI
+                </p>
+                <p className="truncate text-xs font-medium text-slate-500">
+                  Clinical decision support
+                </p>
               </div>
             </div>
 
@@ -45,7 +55,6 @@ export default function AppLayout() {
               <LogOutIcon className="h-4 w-4" />
             </button>
           </div>
-
           <nav className="mt-4 flex gap-2 overflow-x-auto pb-1 lg:mt-8 lg:flex-1 lg:flex-col lg:gap-1.5 lg:overflow-y-auto lg:pb-0">
             {navItems.map(({ to, label, icon: Icon }) => (
               <NavLink key={to} to={to} className={navLinkClass}>
@@ -61,7 +70,6 @@ export default function AppLayout() {
               </NavLink>
             )}
           </nav>
-
           <div className="mt-4 hidden lg:block">
             <div className="rounded-2xl border border-slate-200/70 bg-white/[0.72] p-3 shadow-sm">
               <div className="flex items-center gap-3">
@@ -87,6 +95,13 @@ export default function AppLayout() {
               </div>
             </div>
           </div>
+          {/* Footer position will change in the future when more features are
+          added to the sidebar, for now it is placed here to be visible on all
+          pages */}
+          <div className="pointer-events-none mt-6 flex items-center gap-2 rounded-lg bg-slate-100/70 px-3 py-2 text-xs text-slate-500">
+            <FooterInfoIcon className="h-3 w-3 shrink-0" />
+            <span> Developed by Sam Technologies</span>
+          </div>
         </aside>
 
         <main className="relative z-10 flex-1 overflow-y-auto">
@@ -108,15 +123,31 @@ function navLinkClass({ isActive }: { isActive: boolean }) {
 
 function PulseIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M4 13h3l2-6 4 12 2-6h5" />
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M4 13h3l2-6 4 12 2-6h5"
+      />
     </svg>
   );
 }
 
 function GridIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
       <rect x="3" y="3" width="7" height="7" rx="1.5" />
       <rect x="14" y="3" width="7" height="7" rx="1.5" />
       <rect x="3" y="14" width="7" height="7" rx="1.5" />
@@ -127,7 +158,13 @@ function GridIcon({ className }: { className?: string }) {
 
 function ClockIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
       <circle cx="12" cy="12" r="9" />
       <path strokeLinecap="round" d="M12 7v5l3 3" />
     </svg>
@@ -136,7 +173,13 @@ function ClockIcon({ className }: { className?: string }) {
 
 function UserIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
       <path strokeLinecap="round" d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
       <circle cx="12" cy="7" r="4" />
     </svg>
@@ -145,16 +188,53 @@ function UserIcon({ className }: { className?: string }) {
 
 function ShieldIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+      />
     </svg>
   );
 }
 
 function LogOutIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+      />
     </svg>
+  );
+}
+
+function FooterInfoIcon({ className }: { className?: string }) {
+  return (
+    <div>
+      <svg
+        className={className}
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={2}
+      >
+        <path
+          strokeLinecap="round"
+          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+    </div>
   );
 }
